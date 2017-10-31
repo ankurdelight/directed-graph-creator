@@ -384,10 +384,21 @@ document.onload = (function(d3, saveAs, Blob, undefined){
         thisGraph.updateGraph();
       }
     } else{
-      // we're in the same node
+      // we're in the same node: create new edge for mousedown edge and add to graph
       if (state.justDragged) {
         // dragged, not clicked
         state.justDragged = false;
+
+        // new potential edge
+        var newEdge = {source: mouseDownNode, target: d};
+        // check if already exists
+        var filtRes = thisGraph.edges.filter(function(e) {
+          return (e.source == newEdge.source && e.target == newEdge.target);
+        });
+        // add it if it doesnt exist
+        if (filtRes.length == 0) {
+          thisGraph.edges.push(newEdge);
+        }
       } else{
         // clicked, not dragged
         if (d3.event.shiftKey){
